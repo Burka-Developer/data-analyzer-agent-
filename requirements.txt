@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+streamlit
+langchain
+langchain-openai
+langgraph
+openai
+python-dotenv
+pandas
+numpy
+scikit-learn
+openpyxl
+RestrictedPython
+requests
+python-multipart
+aiofiles
