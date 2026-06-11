@@ -53,7 +53,7 @@ with st.sidebar:
     st.info("🖥️ **Backend:** FastAPI (Python)")
     st.info("🎨 **Frontend:** Streamlit")
     st.info("🧠 **AI Framework:** LangGraph + LangChain")
-    st.info("🤖 **LLM:** xAI Grok")
+    st.info("🤖 **LLM:** Groq (Llama 3.3)")
     st.info("🛡️ **Security:** RestrictedPython Sandbox")
     st.info("🗄️ **Database:** SQLite3")
     st.info("📊 **Data Processing:** Pandas, NumPy, Scikit-learn")

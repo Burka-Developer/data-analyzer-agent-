@@ -1,0 +1,13 @@
+Product,Revenue,Cost,Units_Sold,Region,Month
+Widget A,15000,8500,300,North,January
+Widget B,22000,13000,450,South,January
+Widget C,9500,5200,180,East,January
+Widget D,31000,18000,620,West,January
+Widget A,16500,8800,320,North,February
+Widget B,24000,14500,500,South,February
+Widget C,10000,5500,200,East,February
+Widget D,28000,16500,560,West,February
+Widget A,18000,9200,360,North,March
+Widget B,25500,15000,520,South,March
+Widget C,11000,6000,220,East,March
+Widget D,33000,19000,650,West,March

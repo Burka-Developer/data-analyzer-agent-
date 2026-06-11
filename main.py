@@ -33,10 +33,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# ── CORS for Streamlit (localhost:8501) ──
+# ── CORS — allow frontend from any origin ──
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8501"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -82,6 +82,13 @@ async def analyze(file: UploadFile = File(...), query: str = Form(...)):
         retry_count = result.get("retry_count", 0)
         validation_errors = result.get("validation_errors", [])
 
+        # Extract agent's intermediate work for transparency
+        plan = result.get("plan", "")
+        generated_code = result.get("generated_code", "")
+        exec_output = result.get("exec_output", "")
+        exec_error = result.get("exec_error", "")
+        verdict = result.get("verdict", "")
+
         # Log to SQLite
         insert_run(
             query=query,
@@ -96,6 +103,11 @@ async def analyze(file: UploadFile = File(...), query: str = Form(...)):
             "final_answer": final_answer,
             "retry_count": retry_count,
             "validation_errors": validation_errors,
+            "plan": plan,
+            "generated_code": generated_code,
+            "exec_output": exec_output,
+            "exec_error": exec_error,
+            "verdict": verdict,
         })
 
     except Exception as e:
@@ -130,3 +142,16 @@ async def history():
 async def health():
     """Health check endpoint."""
     return {"status": "ok"}
+
+
+# ── Run with: python main.py ──
+
+if __name__ == "__main__":
+    import uvicorn
+    print("=" * 60)
+    print("  Profitoracle — Validator Agent API")
+    print("  Starting server on http://localhost:8000")
+    print("  Docs available at http://localhost:8000/docs")
+    print("=" * 60)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+

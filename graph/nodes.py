@@ -3,9 +3,9 @@ All 5 node functions for the LangGraph pipeline.
 
 Node 1: file_validator     — Pure Python, no LLM
 Node 2: rejection_handler  — Pure Python, no LLM
-Node 3: planning_agent     — LLM (xAI Grok)
-Node 4: execution_agent    — LLM (xAI Grok) + RestrictedPython exec
-Node 5: validator_agent    — LLM (xAI Grok)
+Node 3: planning_agent     — LLM (Groq Llama 3.3)
+Node 4: execution_agent    — LLM (Groq Llama 3.3) + RestrictedPython exec
+Node 5: validator_agent    — LLM (Groq Llama 3.3)
 """
 
 import os
@@ -18,21 +18,24 @@ from dotenv import load_dotenv
 from utils.file_utils import parse_file, get_schema_summary
 from utils.code_runner import run_agent_code
 
-# Load environment variables
-load_dotenv()
+# Load environment variables (override=True ensures .env changes take effect on reload)
+load_dotenv(override=True)
 
-# xAI Grok client (OpenAI-compatible)
-_client = OpenAI(
-    api_key=os.environ.get("XAI_API_KEY", ""),
-    base_url="https://api.x.ai/v1",
-)
+MODEL_NAME = "llama-3.3-70b-versatile"
 
-MODEL_NAME = "grok-3-mini"
+
+def _get_client() -> OpenAI:
+    """Return a Groq client, reading the API key fresh each time."""
+    return OpenAI(
+        api_key=os.environ.get("GROQ_API_KEY", ""),
+        base_url="https://api.groq.com/openai/v1",
+    )
 
 
 def _call_llm(system_prompt: str, user_prompt: str) -> str:
-    """Call xAI Grok via the OpenAI-compatible API."""
-    response = _client.chat.completions.create(
+    """Call Groq via the OpenAI-compatible API."""
+    client = _get_client()
+    response = client.chat.completions.create(
         model=MODEL_NAME,
         messages=[
             {"role": "system", "content": system_prompt},
@@ -145,7 +148,7 @@ def rejection_handler(state: dict) -> dict:
 
 
 # ────────────────────────────────────────────────────────────────
-# NODE 3: planning_agent (LLM — xAI Grok)
+# NODE 3: planning_agent (LLM — Groq Llama 3.3)
 # ────────────────────────────────────────────────────────────────
 
 PLANNING_SYSTEM_PROMPT = (
@@ -158,7 +161,7 @@ PLANNING_SYSTEM_PROMPT = (
 
 def planning_agent(state: dict) -> dict:
     """
-    Generate a step-by-step analysis plan using xAI Grok.
+    Generate a step-by-step analysis plan using Groq Llama 3.3.
     On retries, includes previous code and output for context.
     """
     df = state.get("file_df")
@@ -204,7 +207,7 @@ def planning_agent(state: dict) -> dict:
 
 
 # ────────────────────────────────────────────────────────────────
-# NODE 4: execution_agent (LLM — xAI Grok + RestrictedPython)
+# NODE 4: execution_agent (LLM — Groq Llama 3.3 + RestrictedPython)
 # ────────────────────────────────────────────────────────────────
 
 EXECUTION_SYSTEM_PROMPT = (
@@ -291,7 +294,7 @@ def execution_agent(state: dict) -> dict:
 
 
 # ────────────────────────────────────────────────────────────────
-# NODE 5: validator_agent (LLM — xAI Grok)
+# NODE 5: validator_agent (LLM — Groq Llama 3.3)
 # ────────────────────────────────────────────────────────────────
 
 VALIDATOR_SYSTEM_PROMPT = (

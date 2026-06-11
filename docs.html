@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profitoracle — Application Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3B82F6;
+            --primary-glow: rgba(59, 130, 246, 0.25);
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --purple: #8B5CF6;
+            --pink: #EC4899;
+            --bg-dark: #0F172A;
+            --bg-card: #1E293B;
+            --bg-elevated: #273548;
+            --border: #334155;
+            --text-primary: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+
+        /* ── Background Grid ── */
+        .bg-grid {
+            position: fixed; inset: 0; z-index: -1; opacity: 0.08;
+            background-image: radial-gradient(#475569 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        /* ── Navbar ── */
+        nav {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+        }
+        .nav-inner {
+            max-width: 1400px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 64px;
+        }
+        .nav-brand {
+            display: flex; align-items: center; gap: 12px;
+        }
+        .nav-logo {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 18px; color: white;
+        }
+        .nav-title {
+            font-size: 1.35rem; font-weight: 800;
+            background: linear-gradient(135deg, #60A5FA, #A78BFA);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav-links { display: flex; gap: 6px; }
+        .nav-links a {
+            padding: 8px 16px; border-radius: 8px; font-size: 0.85rem;
+            font-weight: 500; color: var(--text-secondary); text-decoration: none;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover { color: white; background: var(--bg-elevated); }
+        .nav-links a.active { color: white; background: var(--primary); }
+
+        .btn-tech {
+            padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
+            background: rgba(30, 41, 59, 0.6); color: var(--text-secondary);
+            font-size: 0.85rem; font-weight: 500; cursor: pointer;
+            display: flex; align-items: center; gap: 8px; transition: all 0.2s;
+        }
+        .btn-tech:hover { color: white; border-color: #64748B; background: var(--bg-elevated); }
+        .btn-tech i { color: var(--primary); }
+
+        /* ── Sections ── */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        section { padding: 100px 0 60px; }
+        section:first-of-type { padding-top: 120px; }
+
+        .section-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 14px; border-radius: 20px; font-size: 0.75rem;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        .tag-blue { background: rgba(59,130,246,0.12); color: #60A5FA; border: 1px solid rgba(59,130,246,0.2); }
+        .tag-green { background: rgba(16,185,129,0.12); color: #34D399; border: 1px solid rgba(16,185,129,0.2); }
+        .tag-purple { background: rgba(139,92,246,0.12); color: #A78BFA; border: 1px solid rgba(139,92,246,0.2); }
+        .tag-yellow { background: rgba(245,158,11,0.12); color: #FBBF24; border: 1px solid rgba(245,158,11,0.2); }
+        .tag-pink { background: rgba(236,72,153,0.12); color: #F472B6; border: 1px solid rgba(236,72,153,0.2); }
+
+        .section-title {
+            font-size: 2.2rem; font-weight: 800; margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .section-desc { color: var(--text-secondary); font-size: 1.05rem; max-width: 650px; margin-bottom: 40px; }
+
+        /* ── Cards ── */
+        .card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 28px; transition: all 0.25s;
+        }
+        .card:hover { border-color: #475569; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+
+        .glass {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        /* ── Architecture Flow ── */
+        .flow-container {
+            position: relative; width: 100%; display: flex;
+            flex-direction: column; align-items: center; gap: 16px;
+            padding: 40px 0;
+        }
+        .flow-node {
+            position: relative; z-index: 10;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 14px; padding: 20px 28px; width: 320px;
+            transition: all 0.3s; cursor: default;
+        }
+        .flow-node:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        }
+        .flow-node.active-node {
+            box-shadow: 0 0 25px var(--primary-glow);
+            border-color: var(--primary);
+        }
+        .flow-node-header {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
+        }
+        .flow-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+        }
+        .flow-node-title { font-weight: 700; font-size: 1rem; }
+        .flow-node-desc { font-size: 0.82rem; color: var(--text-secondary); }
+        .flow-badge {
+            display: inline-block; padding: 3px 10px; border-radius: 6px;
+            font-size: 0.7rem; font-weight: 600; margin-top: 8px;
+        }
+
+        .flow-arrow {
+            display: flex; flex-direction: column; align-items: center;
+            color: var(--text-muted); font-size: 1.2rem; position: relative; z-index: 5;
+        }
+        .flow-arrow-line {
+            width: 2px; height: 24px; background: var(--border);
+        }
+        .flow-arrow i { font-size: 0.9rem; }
+        .flow-arrow-label {
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.5px;
+            padding: 3px 10px; border-radius: 6px; margin: 4px 0;
+        }
+
+        .flow-branch {
+            display: flex; gap: 40px; align-items: flex-start; justify-content: center;
+            position: relative; width: 100%;
+        }
+        .flow-branch-connector {
+            position: absolute; top: -16px; left: 50%;
+            transform: translateX(-50%); display: flex;
+            align-items: flex-start; justify-content: center;
+        }
+
+        .agent-box {
+            border: 2px dashed var(--purple); border-radius: 20px;
+            padding: 32px 24px; background: rgba(139,92,246,0.05);
+            position: relative; width: 380px;
+        }
+        .agent-box-label {
+            position: absolute; top: -14px; left: 24px;
+            background: var(--purple); color: white; padding: 4px 14px;
+            border-radius: 8px; font-size: 0.75rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .agent-box .flow-node { width: 100%; }
+        .agent-box .flow-arrow { margin: 4px 0; }
+
+        .retry-label {
+            position: absolute; right: -100px; top: 50%;
+            transform: translateY(-50%);
+            display: flex; align-items: center; gap: 8px;
+            color: var(--warning); font-size: 0.75rem; font-weight: 600;
+        }
+        .retry-label .loop-arrow {
+            width: 60px; height: 80px; border: 2px solid var(--warning);
+            border-left: none; border-radius: 0 12px 12px 0;
+            position: relative;
+        }
+
+        /* ── Endpoints ── */
+        .endpoint-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 14px; overflow: hidden; margin-bottom: 20px;
+            transition: all 0.25s;
+        }
+        .endpoint-card:hover { border-color: #475569; }
+        .endpoint-header {
+            display: flex; align-items: center; gap: 14px;
+            padding: 20px 24px; cursor: pointer; user-select: none;
+        }
+        .method-badge {
+            padding: 5px 14px; border-radius: 6px; font-size: 0.75rem;
+            font-weight: 700; font-family: 'JetBrains Mono', monospace;
+            min-width: 60px; text-align: center;
+        }
+        .method-post { background: rgba(16,185,129,0.15); color: #34D399; }
+        .method-get { background: rgba(59,130,246,0.15); color: #60A5FA; }
+        .endpoint-path {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.95rem;
+            font-weight: 600; color: var(--text-primary);
+        }
+        .endpoint-summary { color: var(--text-secondary); font-size: 0.85rem; margin-left: auto; }
+        .endpoint-toggle { color: var(--text-muted); transition: transform 0.2s; }
+        .endpoint-body {
+            max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+            border-top: 1px solid transparent;
+        }
+        .endpoint-body.open {
+            max-height: 2000px; border-top-color: var(--border);
+        }
+        .endpoint-content { padding: 24px; }
+        .endpoint-desc { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px; }
+
+        .param-table {
+            width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 20px;
+        }
+        .param-table th {
+            text-align: left; padding: 10px 14px; background: var(--bg-dark);
+            color: var(--text-muted); font-weight: 600; font-size: 0.75rem;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+        .param-table td {
+            padding: 10px 14px; border-bottom: 1px solid rgba(51,65,85,0.5);
+            color: var(--text-secondary);
+        }
+        .param-name { font-family: 'JetBrains Mono', monospace; color: var(--primary); font-weight: 500; }
+        .param-type { font-family: 'JetBrains Mono', monospace; color: var(--purple); font-size: 0.8rem; }
+        .param-required {
+            font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;
+            background: rgba(239,68,68,0.12); color: #F87171;
+        }
+
+        .code-block {
+            background: #0D1117; border: 1px solid #21262D; border-radius: 10px;
+            padding: 18px 20px; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem; line-height: 1.7; overflow-x: auto;
+            color: #E6EDF3; position: relative;
+        }
+        .code-block-label {
+            position: absolute; top: 8px; right: 12px; font-size: 0.65rem;
+            font-weight: 600; color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .code-key { color: #79C0FF; }
+        .code-str { color: #A5D6FF; }
+        .code-num { color: #79C0FF; }
+        .code-bracket { color: #8B949E; }
+        .code-comment { color: #8B949E; font-style: italic; }
+
+        /* ── State Schema ── */
+        .state-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .state-field {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 18px; transition: all 0.2s;
+        }
+        .state-field:hover { border-color: #475569; }
+        .state-field-name {
+            font-family: 'JetBrains Mono', monospace; font-weight: 600;
+            font-size: 0.9rem; color: var(--text-primary); margin-bottom: 4px;
+        }
+        .state-field-type {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+            color: var(--purple); margin-bottom: 8px;
+        }
+        .state-field-desc { font-size: 0.8rem; color: var(--text-secondary); }
+
+        /* ── Pipeline Steps ── */
+        .pipeline-step {
+            display: flex; gap: 20px; margin-bottom: 32px;
+        }
+        .step-number {
+            width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 1.1rem;
+        }
+        .step-content { flex: 1; }
+        .step-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 6px; }
+        .step-desc { color: var(--text-secondary); font-size: 0.9rem; }
+        .step-checks {
+            margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px;
+        }
+        .step-check {
+            display: flex; align-items: center; gap: 6px;
+            padding: 5px 12px; border-radius: 8px; font-size: 0.78rem;
+            background: var(--bg-elevated); color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .step-check i { font-size: 0.7rem; }
+
+        /* ── Footer ── */
+        footer {
+            border-top: 1px solid var(--border); padding: 40px 0;
+            text-align: center; color: var(--text-muted); font-size: 0.85rem;
+        }
+
+        /* ── Tech Stack Modal ── */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 200;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            display: none; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .modal-overlay.show { display: flex; opacity: 1; }
+        .modal-box {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 20px; padding: 32px; width: 100%; max-width: 520px;
+            margin: 20px; transform: scale(0.92); transition: transform 0.3s;
+        }
+        .modal-overlay.show .modal-box { transform: scale(1); }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+        }
+        .modal-close {
+            background: var(--bg-elevated); border: none; color: var(--text-muted);
+            width: 36px; height: 36px; border-radius: 10px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; font-size: 0.9rem;
+        }
+        .modal-close:hover { background: #374151; color: white; }
+        .tech-item {
+            display: flex; align-items: center; gap: 14px; padding: 12px 14px;
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.04);
+            background: rgba(15,23,42,0.5); margin-bottom: 8px; transition: all 0.2s;
+        }
+        .tech-item:hover { border-color: rgba(59,130,246,0.2); }
+        .tech-icon {
+            width: 42px; height: 42px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+        }
+        .tech-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .tech-value { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); }
+
+        /* ── Simulation ── */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 var(--primary-glow); }
+            50% { box-shadow: 0 0 20px 6px var(--primary-glow); }
+        }
+        .flow-node.processing {
+            animation: pulse-glow 1.2s ease-in-out infinite;
+            border-color: var(--primary);
+        }
+        .flow-node.done { border-color: var(--success); }
+        .flow-node.error { border-color: var(--danger); }
+
+        .sim-controls {
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+            margin-bottom: 32px;
+        }
+        .sim-btn {
+            padding: 10px 20px; border-radius: 10px; border: none;
+            font-weight: 600; font-size: 0.85rem; cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
+            transition: all 0.2s; color: white;
+        }
+        .sim-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+        .sim-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .sim-btn-blue { background: var(--primary); }
+        .sim-btn-red { background: var(--danger); }
+        .sim-btn-yellow { background: var(--warning); color: #1E293B; }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .section-title { font-size: 1.6rem; }
+            .flow-branch { flex-direction: column; align-items: center; gap: 16px; }
+            .agent-box { width: 100%; }
+            .retry-label { display: none; }
+            .pipeline-step { flex-direction: column; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <!-- ══════════════ Navbar ══════════════ -->
+    <nav>
+        <div class="nav-inner">
+            <div class="nav-brand">
+                <div class="nav-logo">P</div>
+                <div class="nav-title">Profitoracle</div>
+            </div>
+            <div class="nav-links">
+                <a href="#overview" class="active">Overview</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#endpoints">Endpoints</a>
+                <a href="#pipeline">Pipeline</a>
+                <a href="#state">State</a>
+                <a href="#project">Files</a>
+            </div>
+            <button class="btn-tech" onclick="toggleModal()">
+                <i class="fas fa-layer-group"></i> Tech Stack
+            </button>
+        </div>
+    </nav>
+
+    <!-- ══════════════ Tech Stack Modal ══════════════ -->
+    <div class="modal-overlay" id="techModal" onclick="if(event.target===this)toggleModal()">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div>
+                    <h3 style="font-size:1.3rem;font-weight:800;display:flex;align-items:center;gap:10px;">
+                        <i class="fas fa-cubes" style="color:var(--primary)"></i> Technology Stack
+                    </h3>
+                    <p style="color:var(--text-muted);font-size:0.85rem;margin-top:4px;">Core components powering the Validator Agent</p>
+                </div>
+                <button class="modal-close" onclick="toggleModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="max-height:60vh;overflow-y:auto;">
+                <div class="tech-item">
+                    <div class="tech-icon" style="background:rgba(16,185,129,0.1);color:#34D399;"><i class="fas fa-server"></i></div>
+                    <div><div class="tech-label">Backend</div><div class="tech-value">FastAPI (Python 3.11+)</div></div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon" style="background:rgba(239,68,68,0.1);color:#F87171;"><i class="fas fa-laptop-code"></i></div>
+                    <div><div class="tech-label">Frontend</div><div class="tech-value">Streamlit</div></div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon" style="background:rgba(139,92,246,0.1);color:#A78BFA;"><i class="fas fa-brain"></i></div>
+                    <div><div class="tech-label">AI Framework</div><div class="tech-value">LangGraph + LangChain</div></div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon" style="background:rgba(245,158,11,0.1);color:#FBBF24;"><i class="fas fa-microchip"></i></div>
+                    <div><div class="tech-label">LLM</div><div class="tech-value">Groq — Llama 3.3 70B Versatile</div></div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon" style="background:rgba(59,130,246,0.1);color:#60A5FA;"><i class="fas fa-shield-alt"></i></div>
+                    <div><div class="tech-label">Code Sandbox</div><div class="tech-value">RestrictedPython</div></div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon" style="background:rgba(20,184,166,0.1);color:#2DD4BF;"><i class="fas fa-database"></i></div>
+                    <div><div class="tech-label">Database</div><div class="tech-value">SQLite3</div></div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon" style="background:rgba(251,191,36,0.1);color:#FDE68A;"><i class="fas fa-chart-line"></i></div>
+                    <div><div class="tech-label">Data Processing</div><div class="tech-value">Pandas, NumPy, Scikit-learn</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ Section 1: Overview ══════════════ -->
+    <section id="overview">
+        <div class="container">
+            <div class="section-tag tag-blue"><i class="fas fa-info-circle"></i> Overview</div>
+            <h1 class="section-title">What is Profitoracle?</h1>
+            <p class="section-desc">
+                A multi-agent AI pipeline that accepts a natural language query and a CSV/Excel file,
+                autonomously plans an analysis strategy, writes Python code, executes it in a secure sandbox,
+                validates the output, self-corrects up to 3 times, and returns the final answer.
+            </p>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
+                <div class="card" style="border-left:3px solid var(--primary);">
+                    <div style="font-size:2rem;margin-bottom:8px;">📤</div>
+                    <h3 style="font-weight:700;margin-bottom:4px;">Upload & Ask</h3>
+                    <p style="font-size:0.85rem;color:var(--text-secondary);">User uploads a CSV/Excel file and asks a question in plain English.</p>
+                </div>
+                <div class="card" style="border-left:3px solid var(--purple);">
+                    <div style="font-size:2rem;margin-bottom:8px;">🧠</div>
+                    <h3 style="font-weight:700;margin-bottom:4px;">AI Plans & Codes</h3>
+                    <p style="font-size:0.85rem;color:var(--text-secondary);">The LLM creates an analysis plan, then writes Python code to execute it.</p>
+                </div>
+                <div class="card" style="border-left:3px solid var(--success);">
+                    <div style="font-size:2rem;margin-bottom:8px;">🛡️</div>
+                    <h3 style="font-weight:700;margin-bottom:4px;">Sandbox Execution</h3>
+                    <p style="font-size:0.85rem;color:var(--text-secondary);">Code runs in RestrictedPython — no file system, no imports, no network access.</p>
+                </div>
+                <div class="card" style="border-left:3px solid var(--warning);">
+                    <div style="font-size:2rem;margin-bottom:8px;">🔄</div>
+                    <h3 style="font-weight:700;margin-bottom:4px;">Self-Correction</h3>
+                    <p style="font-size:0.85rem;color:var(--text-secondary);">Validator Agent checks the output. On mismatch, loops back and re-plans (up to 3x).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════ Section 2: Architecture Flow ══════════════ -->
+    <section id="architecture" style="background:rgba(15,23,42,0.5);">
+        <div class="container">
+            <div class="section-tag tag-purple"><i class="fas fa-project-diagram"></i> Architecture</div>
+            <h2 class="section-title">Application Flow</h2>
+            <p class="section-desc">
+                Watch the data flow through each node of the LangGraph pipeline.
+                Click the simulation buttons to visualize each scenario.
+            </p>
+
+            <!-- Simulation Controls -->
+            <div class="sim-controls">
+                <button class="sim-btn sim-btn-blue" onclick="simulate('success')" id="btn-success">
+                    <i class="fas fa-play"></i> Simulate Success
+                </button>
+                <button class="sim-btn sim-btn-red" onclick="simulate('reject')" id="btn-reject">
+                    <i class="fas fa-times-circle"></i> Fail Validation
+                </button>
+                <button class="sim-btn sim-btn-yellow" onclick="simulate('retry')" id="btn-retry">
+                    <i class="fas fa-sync-alt"></i> Mismatch Retry
+                </button>
+            </div>
+
+            <!-- Flow Diagram -->
+            <div class="flow-container">
+
+                <!-- User Input -->
+                <div class="flow-node" id="fn-user" style="border-left:3px solid var(--primary);">
+                    <div class="flow-node-header">
+                        <div class="flow-icon" style="background:rgba(59,130,246,0.15);color:#60A5FA;"><i class="fas fa-user"></i></div>
+                        <div class="flow-node-title">User Input</div>
+                    </div>
+                    <div class="flow-node-desc">Query (natural language) + CSV/Excel file uploaded via <code style="color:#60A5FA;">/analyze</code> endpoint.</div>
+                </div>
+
+                <div class="flow-arrow"><div class="flow-arrow-line"></div><i class="fas fa-chevron-down"></i></div>
+
+                <!-- File Validator -->
+                <div class="flow-node" id="fn-validator" style="border-left:3px solid var(--warning);">
+                    <div class="flow-node-header">
+                        <div class="flow-icon" style="background:rgba(245,158,11,0.15);color:#FBBF24;"><i class="fas fa-shield-alt"></i></div>
+                        <div class="flow-node-title">File Validator</div>
+                    </div>
+                    <div class="flow-node-desc">Pure Python — checks extension, size (&lt;10MB), rows (&lt;50K), parseability. No LLM call.</div>
+                    <div style="display:flex;gap:6px;margin-top:8px;">
+                        <span class="flow-badge" style="background:rgba(16,185,129,0.12);color:#34D399;">Pass → Planning</span>
+                        <span class="flow-badge" style="background:rgba(239,68,68,0.12);color:#F87171;">Fail → Rejection</span>
+                    </div>
+                </div>
+
+                <!-- Branch: Rejection (left) / Agent Box (center) -->
+                <div class="flow-arrow"><div class="flow-arrow-line"></div><i class="fas fa-chevron-down"></i></div>
+
+                <div class="flow-branch">
+                    <!-- Rejection Node -->
+                    <div class="flow-node" id="fn-rejection" style="border-left:3px solid var(--danger);width:260px;">
+                        <div class="flow-node-header">
+                            <div class="flow-icon" style="background:rgba(239,68,68,0.15);color:#F87171;"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="flow-node-title">Rejection Handler</div>
+                        </div>
+                        <div class="flow-node-desc">Formats validation errors into a user-facing message. Terminal node — graph ends.</div>
+                        <div class="flow-badge" style="background:rgba(239,68,68,0.12);color:#F87171;margin-top:8px;">→ END</div>
+                    </div>
+
+                    <!-- Data Validator Agent Box -->
+                    <div class="agent-box" style="position:relative;">
+                        <div class="agent-box-label">Data Validator Agent</div>
+
+                        <!-- Planning Agent -->
+                        <div class="flow-node" id="fn-planner" style="border-left:3px solid var(--purple);">
+                            <div class="flow-node-header">
+                                <div class="flow-icon" style="background:rgba(139,92,246,0.15);color:#A78BFA;"><i class="fas fa-brain"></i></div>
+                                <div class="flow-node-title">Planning Agent</div>
+                            </div>
+                            <div class="flow-node-desc">LLM reads schema + question → produces numbered analysis plan. On retry, includes previous errors.</div>
+                            <div class="flow-badge" style="background:rgba(139,92,246,0.12);color:#A78BFA;margin-top:8px;">Groq Llama 3.3</div>
+                        </div>
+
+                        <div class="flow-arrow"><div class="flow-arrow-line" style="height:16px;"></div><i class="fas fa-chevron-down"></i></div>
+
+                        <!-- Execution Agent -->
+                        <div class="flow-node" id="fn-executor" style="border-left:3px solid var(--success);">
+                            <div class="flow-node-header">
+                                <div class="flow-icon" style="background:rgba(16,185,129,0.15);color:#34D399;"><i class="fas fa-terminal"></i></div>
+                                <div class="flow-node-title">Execution Agent</div>
+                            </div>
+                            <div class="flow-node-desc">LLM writes Python code → extracted → run in RestrictedPython sandbox with <code>df</code>, <code>pd</code>, <code>np</code>.</div>
+                            <div class="flow-badge" style="background:rgba(16,185,129,0.12);color:#34D399;margin-top:8px;">Groq + Sandbox</div>
+                        </div>
+
+                        <div class="flow-arrow"><div class="flow-arrow-line" style="height:16px;"></div><i class="fas fa-chevron-down"></i></div>
+
+                        <!-- Validator Agent -->
+                        <div class="flow-node" id="fn-logic-validator" style="border-left:3px solid var(--pink);">
+                            <div class="flow-node-header">
+                                <div class="flow-icon" style="background:rgba(236,72,153,0.15);color:#F472B6;"><i class="fas fa-check-double"></i></div>
+                                <div class="flow-node-title">Validator Agent</div>
+                            </div>
+                            <div class="flow-node-desc">LLM checks if output answers the user's question. Returns JSON: <code>{"verdict":"match"|"mismatch"}</code></div>
+                            <div style="display:flex;gap:6px;margin-top:8px;">
+                                <span class="flow-badge" style="background:rgba(16,185,129,0.12);color:#34D399;">Match → Answer</span>
+                                <span class="flow-badge" style="background:rgba(245,158,11,0.12);color:#FBBF24;">Mismatch → Re-plan</span>
+                            </div>
+                        </div>
+
+                        <!-- Retry loop indicator -->
+                        <div class="retry-label">
+                            <div style="text-align:center;">
+                                <i class="fas fa-redo" style="font-size:1.1rem;"></i>
+                                <div style="margin-top:4px;">Retry Loop</div>
+                                <div style="font-size:0.65rem;color:var(--text-muted);">max 3 attempts</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-arrow"><div class="flow-arrow-line"></div><i class="fas fa-chevron-down"></i></div>
+
+                <!-- Final Answer -->
+                <div class="flow-node" id="fn-success" style="border-left:3px solid var(--success);">
+                    <div class="flow-node-header">
+                        <div class="flow-icon" style="background:rgba(16,185,129,0.15);color:#34D399;"><i class="fas fa-check-circle"></i></div>
+                        <div class="flow-node-title">Final Answer</div>
+                    </div>
+                    <div class="flow-node-desc">Analysis result returned to user via API and logged to SQLite database.</div>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:24px;border-top:1px solid var(--border);padding-top:24px;">
+                <div style="display:flex;gap:12px;align-items:flex-start;">
+                    <i class="fas fa-filter" style="color:var(--warning);margin-top:4px;"></i>
+                    <div>
+                        <strong style="display:block;margin-bottom:2px;">Pre-Validation</strong>
+                        <span style="font-size:0.82rem;color:var(--text-secondary);">Fast Python checks before any LLM calls to save cost and time.</span>
+                    </div>
+                </div>
+                <div style="display:flex;gap:12px;align-items:flex-start;">
+                    <i class="fas fa-check-double" style="color:var(--pink);margin-top:4px;"></i>
+                    <div>
+                        <strong style="display:block;margin-bottom:2px;">Output Verification</strong>
+                        <span style="font-size:0.82rem;color:var(--text-secondary);">Validator Agent confirms the result answers the actual question asked.</span>
+                    </div>
+                </div>
+                <div style="display:flex;gap:12px;align-items:flex-start;">
+                    <i class="fas fa-sync" style="color:var(--purple);margin-top:4px;"></i>
+                    <div>
+                        <strong style="display:block;margin-bottom:2px;">Self-Correction</strong>
+                        <span style="font-size:0.82rem;color:var(--text-secondary);">On mismatch or error, re-plans with context about what went wrong.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════ Section 3: API Endpoints ══════════════ -->
+    <section id="endpoints">
+        <div class="container">
+            <div class="section-tag tag-green"><i class="fas fa-plug"></i> API Reference</div>
+            <h2 class="section-title">REST Endpoints</h2>
+            <p class="section-desc">
+                The FastAPI backend exposes three endpoints. The server runs on
+                <code style="color:var(--primary);">http://localhost:8000</code> with auto-reload.
+            </p>
+
+            <!-- POST /analyze -->
+            <div class="endpoint-card">
+                <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                    <span class="method-badge method-post">POST</span>
+                    <span class="endpoint-path">/analyze</span>
+                    <span class="endpoint-summary">Analyze a spreadsheet with a natural language query</span>
+                    <i class="fas fa-chevron-down endpoint-toggle"></i>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-content">
+                        <p class="endpoint-desc">
+                            Accepts a multipart form with a spreadsheet file and a query string. Runs the full LangGraph pipeline
+                            (validation → planning → execution → verification) and returns the result. Files are automatically cleaned up after processing.
+                        </p>
+
+                        <h4 style="font-weight:700;font-size:0.85rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Request Parameters</h4>
+                        <table class="param-table">
+                            <thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-name">file</td>
+                                    <td class="param-type">File</td>
+                                    <td><span class="param-required">required</span></td>
+                                    <td>CSV, XLSX, or XLS file. Max 10MB, 50K rows.</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-name">query</td>
+                                    <td class="param-type">string</td>
+                                    <td><span class="param-required">required</span></td>
+                                    <td>Natural language question about the data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="font-weight:700;font-size:0.85rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin:20px 0 12px;">Success Response <span style="color:#34D399;font-size:0.75rem;">200 OK</span></h4>
+                        <div class="code-block">
+                            <span class="code-block-label">JSON</span>
+<span class="code-bracket">{</span>
+  <span class="code-key">"status"</span>: <span class="code-str">"success"</span>,
+  <span class="code-key">"final_answer"</span>: <span class="code-str">"[{'Region': 'East', 'Revenue': 30500}, ...]"</span>,
+  <span class="code-key">"retry_count"</span>: <span class="code-num">0</span>,
+  <span class="code-key">"validation_errors"</span>: []
+<span class="code-bracket">}</span>
+                        </div>
+
+                        <h4 style="font-weight:700;font-size:0.85rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin:20px 0 12px;">Rejection Response <span style="color:#F87171;font-size:0.75rem;">200 OK (status: rejected)</span></h4>
+                        <div class="code-block">
+                            <span class="code-block-label">JSON</span>
+<span class="code-bracket">{</span>
+  <span class="code-key">"status"</span>: <span class="code-str">"rejected"</span>,
+  <span class="code-key">"final_answer"</span>: <span class="code-str">"File validation failed: Unsupported format '.txt'"</span>,
+  <span class="code-key">"retry_count"</span>: <span class="code-num">0</span>,
+  <span class="code-key">"validation_errors"</span>: [<span class="code-str">"Unsupported file format: '.txt'"</span>]
+<span class="code-bracket">}</span>
+                        </div>
+
+                        <h4 style="font-weight:700;font-size:0.85rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin:20px 0 12px;">Status Values</h4>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <span style="padding:6px 14px;border-radius:8px;font-size:0.8rem;font-weight:600;background:rgba(16,185,129,0.12);color:#34D399;">success — query answered</span>
+                            <span style="padding:6px 14px;border-radius:8px;font-size:0.8rem;font-weight:600;background:rgba(239,68,68,0.12);color:#F87171;">rejected — file invalid</span>
+                            <span style="padding:6px 14px;border-radius:8px;font-size:0.8rem;font-weight:600;background:rgba(245,158,11,0.12);color:#FBBF24;">failed — max retries exceeded</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GET /history -->
+            <div class="endpoint-card">
+                <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                    <span class="method-badge method-get">GET</span>
+                    <span class="endpoint-path">/history</span>
+                    <span class="endpoint-summary">Retrieve the last 20 analysis runs</span>
+                    <i class="fas fa-chevron-down endpoint-toggle"></i>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-content">
+                        <p class="endpoint-desc">
+                            Returns the most recent 20 runs from the SQLite database, ordered newest-first.
+                            Each entry includes the query, filename, status, retry count, and final answer.
+                        </p>
+                        <div class="code-block">
+                            <span class="code-block-label">Response</span>
+[
+  <span class="code-bracket">{</span>
+    <span class="code-key">"id"</span>: <span class="code-num">13</span>,
+    <span class="code-key">"timestamp"</span>: <span class="code-str">"2026-06-11T18:09:38.421"</span>,
+    <span class="code-key">"query"</span>: <span class="code-str">"What is the total revenue by region?"</span>,
+    <span class="code-key">"filename"</span>: <span class="code-str">"test_data.csv"</span>,
+    <span class="code-key">"status"</span>: <span class="code-str">"success"</span>,
+    <span class="code-key">"retry_count"</span>: <span class="code-num">0</span>,
+    <span class="code-key">"final_answer"</span>: <span class="code-str">"[{'Region':'East','Revenue':30500}, ...]"</span>
+  <span class="code-bracket">}</span>
+]
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GET /health -->
+            <div class="endpoint-card">
+                <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                    <span class="method-badge method-get">GET</span>
+                    <span class="endpoint-path">/health</span>
+                    <span class="endpoint-summary">Health check</span>
+                    <i class="fas fa-chevron-down endpoint-toggle"></i>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-content">
+                        <p class="endpoint-desc">Simple health check. Returns <code style="color:var(--success);">200</code> when the server is running.</p>
+                        <div class="code-block">
+                            <span class="code-block-label">Response</span>
+<span class="code-bracket">{</span> <span class="code-key">"status"</span>: <span class="code-str">"ok"</span> <span class="code-bracket">}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════ Section 4: Pipeline Deep Dive ══════════════ -->
+    <section id="pipeline" style="background:rgba(15,23,42,0.5);">
+        <div class="container">
+            <div class="section-tag tag-pink"><i class="fas fa-cogs"></i> Pipeline</div>
+            <h2 class="section-title">How Each Node Works</h2>
+            <p class="section-desc">
+                The LangGraph pipeline has 5 nodes connected by conditional edges. Here's exactly what each node does.
+            </p>
+
+            <!-- Node 1 -->
+            <div class="pipeline-step">
+                <div class="step-number" style="background:rgba(245,158,11,0.15);color:#FBBF24;">1</div>
+                <div class="step-content">
+                    <div class="step-title"><i class="fas fa-shield-alt" style="color:var(--warning);margin-right:8px;"></i>file_validator</div>
+                    <div class="step-desc">
+                        Pure Python validation — no LLM cost. Runs 5 sequential checks on the uploaded file.
+                        On <em>any</em> failure, sets <code>status = "rejected"</code> and short-circuits to the rejection handler.
+                    </div>
+                    <div class="step-checks">
+                        <span class="step-check"><i class="fas fa-check" style="color:var(--success);"></i> File exists &amp; not empty</span>
+                        <span class="step-check"><i class="fas fa-check" style="color:var(--success);"></i> Extension is .csv / .xlsx / .xls</span>
+                        <span class="step-check"><i class="fas fa-check" style="color:var(--success);"></i> Size &lt; 10 MB</span>
+                        <span class="step-check"><i class="fas fa-check" style="color:var(--success);"></i> Parseable by Pandas</span>
+                        <span class="step-check"><i class="fas fa-check" style="color:var(--success);"></i> Row count &lt; 50,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Node 2 -->
+            <div class="pipeline-step">
+                <div class="step-number" style="background:rgba(239,68,68,0.15);color:#F87171;">2</div>
+                <div class="step-content">
+                    <div class="step-title"><i class="fas fa-exclamation-triangle" style="color:var(--danger);margin-right:8px;"></i>rejection_handler</div>
+                    <div class="step-desc">
+                        Terminal node. Formats the validation errors into a human-readable message and sets <code>final_answer</code>.
+                        The graph ends here — no LLM is ever called for invalid files.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Node 3 -->
+            <div class="pipeline-step">
+                <div class="step-number" style="background:rgba(139,92,246,0.15);color:#A78BFA;">3</div>
+                <div class="step-content">
+                    <div class="step-title"><i class="fas fa-brain" style="color:var(--purple);margin-right:8px;"></i>planning_agent <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">— LLM</span></div>
+                    <div class="step-desc">
+                        Calls Groq Llama 3.3 with the user's question and DataFrame schema (columns, dtypes, first 3 rows, shape).
+                        Produces a numbered, step-by-step analysis plan. On <strong>retries</strong>, includes the previous code,
+                        execution error, and validator feedback to avoid repeating mistakes.
+                    </div>
+                    <div class="code-block" style="margin-top:12px;">
+                        <span class="code-block-label">System Prompt</span>
+<span class="code-comment">You are a senior data analyst. Given a user question
+and a DataFrame schema, produce a precise, step-by-step
+analysis plan in plain English. Be specific about which
+columns to use, what calculations to perform, and what
+the output format should be. Do not write code.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Node 4 -->
+            <div class="pipeline-step">
+                <div class="step-number" style="background:rgba(16,185,129,0.15);color:#34D399;">4</div>
+                <div class="step-content">
+                    <div class="step-title"><i class="fas fa-terminal" style="color:var(--success);margin-right:8px;"></i>execution_agent <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">— LLM + Sandbox</span></div>
+                    <div class="step-desc">
+                        Calls Groq to generate Python code based on the plan. Extracts code from markdown fences if present.
+                        Executes via <strong>RestrictedPython</strong> with <code>df</code> (DataFrame), <code>pd</code> (pandas), and <code>np</code> (numpy) injected.
+                        The code must assign its answer to <code>RESULT</code>. On execution error, increments <code>retry_count</code>.
+                    </div>
+                    <div class="step-checks" style="margin-top:12px;">
+                        <span class="step-check"><i class="fas fa-ban" style="color:var(--danger);"></i> No <code>import</code></span>
+                        <span class="step-check"><i class="fas fa-ban" style="color:var(--danger);"></i> No <code>os</code> / <code>subprocess</code></span>
+                        <span class="step-check"><i class="fas fa-ban" style="color:var(--danger);"></i> No <code>__import__</code></span>
+                        <span class="step-check"><i class="fas fa-ban" style="color:var(--danger);"></i> No <code>print()</code></span>
+                        <span class="step-check"><i class="fas fa-check" style="color:var(--success);"></i> <code>RESULT</code> must be str/num/dict/list</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Node 5 -->
+            <div class="pipeline-step">
+                <div class="step-number" style="background:rgba(236,72,153,0.15);color:#F472B6;">5</div>
+                <div class="step-content">
+                    <div class="step-title"><i class="fas fa-check-double" style="color:var(--pink);margin-right:8px;"></i>validator_agent <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">— LLM</span></div>
+                    <div class="step-desc">
+                        Calls Groq to verify the execution output answers the user's original question.
+                        Returns a JSON verdict: <code>{"verdict": "match"|"mismatch", "reason": "..."}</code>.
+                        On <strong>match</strong> → sets <code>final_answer</code> and ends. On <strong>mismatch</strong> → increments retry and loops back to planning agent.
+                        After 3 failed attempts, ends with a graceful failure message.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Routing Logic -->
+            <div class="card" style="margin-top:24px;border-left:3px solid var(--warning);">
+                <h3 style="font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:10px;">
+                    <i class="fas fa-code-branch" style="color:var(--warning);"></i> Edge Routing Logic
+                </h3>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;font-size:0.85rem;">
+                    <div>
+                        <strong style="color:var(--primary);font-family:'JetBrains Mono',monospace;font-size:0.82rem;">route_after_validation()</strong>
+                        <div style="color:var(--text-secondary);margin-top:4px;">
+                            <code>status == "rejected"</code> → rejection_handler<br>
+                            <code>else</code> → planning_agent
+                        </div>
+                    </div>
+                    <div>
+                        <strong style="color:var(--primary);font-family:'JetBrains Mono',monospace;font-size:0.82rem;">route_after_execution()</strong>
+                        <div style="color:var(--text-secondary);margin-top:4px;">
+                            <code>exec_error + retries ≤ 2</code> → planning_agent<br>
+                            <code>exec_error + retries > 2</code> → END<br>
+                            <code>success</code> → validator_agent
+                        </div>
+                    </div>
+                    <div>
+                        <strong style="color:var(--primary);font-family:'JetBrains Mono',monospace;font-size:0.82rem;">route_after_validation_check()</strong>
+                        <div style="color:var(--text-secondary);margin-top:4px;">
+                            <code>verdict == "match"</code> → END<br>
+                            <code>mismatch + retries ≤ 2</code> → planning_agent<br>
+                            <code>mismatch + retries > 2</code> → END
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════ Section 5: Agent State ══════════════ -->
+    <section id="state">
+        <div class="container">
+            <div class="section-tag tag-yellow"><i class="fas fa-database"></i> State Schema</div>
+            <h2 class="section-title">AgentState TypedDict</h2>
+            <p class="section-desc">
+                The shared state flows through every node in the pipeline. Each node reads and writes specific fields.
+                Defined in <code style="color:var(--primary);">graph/state.py</code>.
+            </p>
+
+            <div class="state-grid">
+                <div class="state-field" style="border-left:3px solid var(--primary);">
+                    <div class="state-field-name">user_query</div>
+                    <div class="state-field-type">str</div>
+                    <div class="state-field-desc">Natural language question from the user.</div>
+                </div>
+                <div class="state-field" style="border-left:3px solid var(--primary);">
+                    <div class="state-field-name">file_path</div>
+                    <div class="state-field-type">str</div>
+                    <div class="state-field-desc">Absolute path to the saved upload file.</div>
+                </div>
+                <div class="state-field" style="border-left:3px solid var(--warning);">
+                    <div class="state-field-name">file_df</div>
+                    <div class="state-field-type">Optional[DataFrame]</div>
+                    <div class="state-field-desc">Parsed pandas DataFrame. Set by file_validator on success.</div>
+                </div>
+                <div class="state-field" style="border-left:3px solid var(--danger);">
+                    <div class="state-field-name">validation_errors</div>
+                    <div class="state-field-type">list[str]</div>
+                    <div class="state-field-desc">Validation failure reasons. Empty if file passed.</div>
+                </div>
+                <div class="state-field" style="border-left:3px solid var(--purple);">
+                    <div class="state-field-name">plan</div>
+                    <div class="state-field-type">str</div>
+                    <div class="state-field-desc">Step-by-step analysis plan from the planning agent.</div>
+                </div>
+                <div class="state-field" style="border-left:3px solid var(--success);">
+                    <div class="state-field-name">generated_code</div>
+                    <div class="state-field-type">str</div>
+                    <div class="state-field-desc">Python code written by the execution agent.</div>
+                </div>
+                <div class="state-field" style="border-left:3px solid var(--success);">
+                    <div class="state-field-name">exec_output</div>
+                    <div class="state-field-type">Optional[str]</div>
+                    <div class="state-field-desc">The RESULT value from sandbox execution.</div>
+                </div>
+                <div class="state-field" style="border-left:3px solid var(--danger);">
+                    <div class="state-field-name">exec_error</div>
+                    <div class="state-field-type">Optional[str]</div>
+                    <div class="state-field-desc">Error message if sandbox execution failed.</div>
+                </div>
+                <div class="state-field" style="border-left:3px solid var(--pink);">
+                    <div class="state-field-name">verdict</div>
+                    <div class="state-field-type">str</div>
+                    <div class="state-field-desc">"match" or "mismatch" from the validator agent.</div>
+                </div>
+                <div class="state-field" style="border-left:3px solid var(--warning);">
+                    <div class="state-field-name">retry_count</div>
+                    <div class="state-field-type">int</div>
+                    <div class="state-field-desc">Number of re-plan attempts. Ceiling is 3.</div>
+                </div>
+                <div class="state-field" style="border-left:3px solid var(--success);">
+                    <div class="state-field-name">final_answer</div>
+                    <div class="state-field-type">str</div>
+                    <div class="state-field-desc">The answer returned to the user.</div>
+                </div>
+                <div class="state-field" style="border-left:3px solid var(--primary);">
+                    <div class="state-field-name">status</div>
+                    <div class="state-field-type">str</div>
+                    <div class="state-field-desc">"pending" | "validated" | "rejected" | "success" | "failed"</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════ Section 6: Project Structure ══════════════ -->
+    <section id="project" style="background:rgba(15,23,42,0.5);">
+        <div class="container">
+            <div class="section-tag tag-blue"><i class="fas fa-folder-open"></i> Project Files</div>
+            <h2 class="section-title">Directory Structure</h2>
+            <p class="section-desc">
+                16 files organized into 4 packages. Each file has a single, clear responsibility.
+            </p>
+
+            <div class="code-block" style="font-size:0.85rem;line-height:2;">
+<span class="code-comment">profitoracle/</span>
+├── <span class="code-str">.env</span>                    <span class="code-comment"># GROQ_API_KEY=your_key_here</span>
+├── <span class="code-str">.env.example</span>            <span class="code-comment"># Template for API key</span>
+├── <span class="code-str">requirements.txt</span>        <span class="code-comment"># 16 Python packages</span>
+├── <span class="code-str">README.md</span>               <span class="code-comment"># Setup guide + architecture</span>
+├── <span class="code-key">main.py</span>                 <span class="code-comment"># FastAPI app — 3 endpoints + uvicorn entry</span>
+│
+├── <span class="code-comment">graph/</span>                  <span class="code-comment"># LangGraph pipeline</span>
+│   ├── <span class="code-str">__init__.py</span>
+│   ├── <span class="code-key">state.py</span>            <span class="code-comment"># AgentState TypedDict (12 fields)</span>
+│   ├── <span class="code-key">nodes.py</span>            <span class="code-comment"># 5 node functions + LLM client</span>
+│   ├── <span class="code-key">edges.py</span>            <span class="code-comment"># 3 routing functions</span>
+│   └── <span class="code-key">graph.py</span>            <span class="code-comment"># StateGraph builder + lazy compile</span>
+│
+├── <span class="code-comment">utils/</span>                  <span class="code-comment"># Shared utilities</span>
+│   ├── <span class="code-str">__init__.py</span>
+│   ├── <span class="code-key">file_utils.py</span>       <span class="code-comment"># save_upload, parse_file, delete_file, get_schema_summary</span>
+│   ├── <span class="code-key">code_runner.py</span>      <span class="code-comment"># RestrictedPython sandbox executor</span>
+│   └── <span class="code-key">db.py</span>               <span class="code-comment"># SQLite3 init, insert, query</span>
+│
+├── <span class="code-comment">frontend/</span>               <span class="code-comment"># UI layer</span>
+│   └── <span class="code-key">app.py</span>              <span class="code-comment"># Streamlit single-page app</span>
+│
+├── <span class="code-comment">data/</span>                   <span class="code-comment"># Auto-created — holds runs.db</span>
+└── <span class="code-comment">uploads/</span>                <span class="code-comment"># Auto-created — temp file storage</span>
+            </div>
+
+            <!-- How to Run -->
+            <div class="card" style="margin-top:32px;border-left:3px solid var(--success);">
+                <h3 style="font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+                    <i class="fas fa-rocket" style="color:var(--success);"></i> How to Run
+                </h3>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;">
+                    <div>
+                        <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">1. Install &amp; Configure</div>
+                        <div class="code-block" style="font-size:0.8rem;">
+pip install -r requirements.txt
+<span class="code-comment"># Edit .env → add your GROQ_API_KEY</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">2. Start Backend (Terminal 1)</div>
+                        <div class="code-block" style="font-size:0.8rem;">
+python main.py
+<span class="code-comment"># → http://localhost:8000</span>
+<span class="code-comment"># → Docs: http://localhost:8000/docs</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">3. Start Frontend (Terminal 2)</div>
+                        <div class="code-block" style="font-size:0.8rem;">
+streamlit run frontend/app.py
+<span class="code-comment"># → http://localhost:8501</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════ Footer ══════════════ -->
+    <footer>
+        <div class="container">
+            <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;">
+                <div class="nav-logo" style="width:28px;height:28px;font-size:14px;border-radius:8px;">P</div>
+                <span style="font-weight:700;font-size:1rem;color:var(--text-primary);">Profitoracle</span>
+            </div>
+            <p>Data Validator Agent &mdash; Powered by Groq Llama 3.3 &bull; LangGraph &bull; FastAPI</p>
+            <p style="margin-top:6px;font-size:0.75rem;">Built with RestrictedPython sandbox for secure code execution</p>
+        </div>
+    </footer>
+
+    <script>
+        // ── Smooth scroll for nav links ──
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const id = link.getAttribute('href');
+                document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+                document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        // Highlight active nav on scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(sec => {
+                if (window.scrollY >= sec.offsetTop - 200) current = sec.id;
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+            });
+        });
+
+        // ── Tech Stack Modal ──
+        function toggleModal() {
+            const modal = document.getElementById('techModal');
+            modal.classList.toggle('show');
+        }
+
+        // ── Endpoint Accordion ──
+        function toggleEndpoint(header) {
+            const body = header.nextElementSibling;
+            const icon = header.querySelector('.endpoint-toggle');
+            body.classList.toggle('open');
+            icon.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+        }
+
+        // ── Flow Simulation ──
+        let simRunning = false;
+
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        function resetNodes() {
+            document.querySelectorAll('.flow-node').forEach(n => {
+                n.classList.remove('processing', 'done', 'error', 'active-node');
+            });
+        }
+
+        async function activateNode(id, duration = 800, type = 'done') {
+            const node = document.getElementById(id);
+            if (!node) return;
+            node.classList.add('processing', 'active-node');
+            node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            await sleep(duration);
+            node.classList.remove('processing');
+            node.classList.add(type);
+        }
+
+        function setButtons(disabled) {
+            document.querySelectorAll('.sim-btn').forEach(b => b.disabled = disabled);
+        }
+
+        async function simulate(scenario) {
+            if (simRunning) return;
+            simRunning = true;
+            setButtons(true);
+            resetNodes();
+
+            // User input
+            await activateNode('fn-user', 600);
+
+            // File validator
+            await activateNode('fn-validator', 700);
+
+            if (scenario === 'reject') {
+                await activateNode('fn-rejection', 800, 'error');
+            } else {
+                // Planning
+                await activateNode('fn-planner', 900);
+                // Execution
+                await activateNode('fn-executor', 900);
+                // Logic validator
+                await activateNode('fn-logic-validator', 800);
+
+                if (scenario === 'retry') {
+                    // Mismatch → loop back
+                    document.getElementById('fn-logic-validator').classList.remove('done');
+                    document.getElementById('fn-logic-validator').classList.add('error');
+                    await sleep(500);
+
+                    // Reset inner nodes for retry
+                    ['fn-planner', 'fn-executor', 'fn-logic-validator'].forEach(id => {
+                        document.getElementById(id).classList.remove('done', 'error');
+                    });
+
+                    await activateNode('fn-planner', 800);
+                    await activateNode('fn-executor', 800);
+                    await activateNode('fn-logic-validator', 700);
+                }
+
+                // Final answer
+                await activateNode('fn-success', 800);
+            }
+
+            simRunning = false;
+            setButtons(false);
+        }
+    </script>
+</body>
+</html>

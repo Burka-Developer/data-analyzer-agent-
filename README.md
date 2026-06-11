@@ -19,17 +19,17 @@ User Input (Query + CSV)
 │                                          │
 │  ┌────────────────┐                      │
 │  │ Planning Agent  │◀──── Re-plan ◄──┐   │
-│  │   (xAI Grok)   │                 │   │
+│  │     (Groq)     │                 │   │
 │  └───────┬────────┘                 │   │
 │          ▼                          │   │
 │  ┌────────────────┐                 │   │
 │  │ Execution Agent │                 │   │
-│  │   (xAI Grok)   │                 │   │
+│  │     (Groq)     │                 │   │
 │  └───────┬────────┘                 │   │
 │          ▼                          │   │
 │  ┌────────────────┐                 │   │
 │  │ Validator Agent │── Mismatch ────┘   │
-│  │   (xAI Grok)   │                     │
+│  │     (Groq)     │                     │
 │  └───────┬────────┘                     │
 │          │ Match                         │
 └──────────┼───────────────────────────────┘
@@ -43,7 +43,7 @@ User Input (Query + CSV)
 
 | Layer            | Technology                              |
 |------------------|-----------------------------------------|
-| LLM API          | xAI Grok (via OpenAI-compatible client) |
+| LLM API          | Groq (via OpenAI-compatible client)     |
 | AI Framework     | LangGraph + LangChain                   |
 | Backend API      | FastAPI (Python 3.11+)                  |
 | Frontend UI      | Streamlit                               |
@@ -62,7 +62,7 @@ User Input (Query + CSV)
    ```bash
    cp .env.example .env
    ```
-   Then edit `.env` and add your xAI API key.
+   Then edit `.env` and add your Groq API key.
 
 3. Start the backend (Terminal 1):
    ```bash
@@ -80,8 +80,8 @@ User Input (Query + CSV)
 
 ```
 profitoracle/
-├── .env                    ← XAI_API_KEY=your_key_here
-├── .env.example            ← XAI_API_KEY=
+├── .env                    ← GROQ_API_KEY=your_key_here
+├── .env.example            ← GROQ_API_KEY=
 ├── requirements.txt
 ├── README.md
 ├── main.py                 ← FastAPI app + uvicorn entry
