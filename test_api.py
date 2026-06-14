@@ -5,7 +5,7 @@ import requests
 import os
 import tempfile
 
-API = "http://localhost:8000"
+API = "http://localhost:7860"
 
 # ─── Test 1: Valid CSV with file validation (will fail at LLM call if no API key) ───
 print("=" * 60)

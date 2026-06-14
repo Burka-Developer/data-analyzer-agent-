@@ -1,5 +1,5 @@
 """
-Profitoracle — Streamlit Frontend
+SheetQA — Streamlit Frontend
 Single-page UI for uploading spreadsheets and querying the Validator Agent.
 """
 
@@ -8,12 +8,12 @@ import requests
 
 # ── Page Configuration ──
 st.set_page_config(
-    page_title="Profitoracle — Data Validator Agent",
+    page_title="SheetQA — Data Validator Agent",
     page_icon="📊",
     layout="centered",
 )
 
-API_URL = "http://localhost:8000"
+API_URL = "http://localhost:7860"
 
 # ── Custom CSS for styling ──
 st.markdown("""
@@ -86,7 +86,7 @@ with st.sidebar:
 
 
 # ── Main Content ──
-st.markdown('<div class="main-header">Profitoracle</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header">SheetQA</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="sub-header">Data Validator Agent — Upload, Ask, Analyze</div>',
     unsafe_allow_html=True,
@@ -176,7 +176,7 @@ if analyze_clicked:
             except requests.ConnectionError:
                 st.error(
                     "🔌 Cannot connect to the backend. "
-                    "Make sure the API is running on http://localhost:8000"
+                    "Make sure the API is running on http://localhost:7860"
                 )
             except requests.Timeout:
                 st.warning(

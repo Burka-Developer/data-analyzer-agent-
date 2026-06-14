@@ -1,5 +1,5 @@
 """
-Quick end-to-end test of the Profitoracle agent API.
+Quick end-to-end test of the SheetQA agent API.
 Tests: /health, /analyze (valid CSV), /analyze (bad file), /history
 """
 
@@ -13,7 +13,7 @@ if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-BASE = "http://localhost:8000"
+BASE = "http://localhost:7860"
 CSV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_data.csv")
 
 
@@ -102,7 +102,7 @@ def test_history():
 
 if __name__ == "__main__":
     print(f"\n{'#'*60}")
-    print(f"  PROFITORACLE AGENT -- End-to-End API Test Suite")
+    print(f"  SHEETQA AGENT -- End-to-End API Test Suite")
     print(f"{'#'*60}")
 
     tests = [test_health, test_analyze_bad_file, test_analyze_valid, test_history]

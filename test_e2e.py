@@ -1,12 +1,12 @@
 """
-End-to-end test of the Profitoracle Validator Agent.
+End-to-end test of the SheetQA Validator Agent.
 Tests all 3 flow paths from the architecture diagram:
 
   1. SUCCESS:   CSV + query -> full pipeline -> correct answer
   2. REJECTION: Invalid file -> rejection handler -> error message
   3. HISTORY:   GET /history -> verify logged runs
 
-Requires: FastAPI server running on http://localhost:8000
+Requires: FastAPI server running on http://localhost:7860
 """
 
 import requests
@@ -15,7 +15,7 @@ import sys
 import json
 import time
 
-API = "http://localhost:8000"
+API = "http://localhost:7860"
 DIVIDER = "=" * 70
 
 # ── Helpers ──

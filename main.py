@@ -1,5 +1,5 @@
 """
-Profitoracle — FastAPI Backend
+SheetQA — FastAPI Backend
 Exposes /analyze, /history, and /health endpoints.
 Invokes the LangGraph pipeline and manages file lifecycle.
 """
@@ -10,7 +10,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 
 from utils.file_utils import save_upload, delete_file
 from utils.db import init_db, insert_run, get_history
@@ -28,7 +28,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Profitoracle — Validator Agent API",
+    title="SheetQA — Validator Agent API",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -41,6 +41,20 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# ── Serve Frontend ──
+
+@app.get("/")
+async def read_index():
+    """Serve the main frontend page."""
+    return FileResponse("frontend/index.html")
+
+
+@app.get("/docs.html")
+async def read_docs():
+    """Serve the documentation page."""
+    return FileResponse("docs.html")
 
 
 # ── POST /analyze ──
@@ -149,9 +163,9 @@ async def health():
 if __name__ == "__main__":
     import uvicorn
     print("=" * 60)
-    print("  Profitoracle — Validator Agent API")
-    print("  Starting server on http://localhost:8000")
-    print("  Docs available at http://localhost:8000/docs")
+    print("  SheetQA — Validator Agent API")
+    print("  Starting server on http://0.0.0.0:7860")
+    print("  Docs available at http://0.0.0.0:7860")
     print("=" * 60)
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=7860, reload=True)
 

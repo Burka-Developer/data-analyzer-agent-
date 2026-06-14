@@ -1,4 +1,4 @@
-# Profitoracle — Data Validator Agent
+# SheetQA — Data Validator Agent
 
 A multi-agent pipeline that accepts a user query and a CSV/spreadsheet file, performs layered validation and intelligent data analysis, executes self-written Python code locally, verifies the output, and returns a final answer to the user.
 
@@ -79,7 +79,7 @@ User Input (Query + CSV)
 ## Project Structure
 
 ```
-profitoracle/
+sheetqa/
 ├── .env                    ← GROQ_API_KEY=your_key_here
 ├── .env.example            ← GROQ_API_KEY=
 ├── requirements.txt
